@@ -6,5 +6,5 @@ CREATE TABLE user (
     hometown VARCHAR(50),
     password VARCHAR(100),
     login_date TIMESTAMP,
-    account_status ENUM('active', 'deactvie')    
+    account_status ENUM('active', 'deactvie')
 );
