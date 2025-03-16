@@ -1,5 +1,5 @@
-CREATE TABLE user(
-    first_name VARCHAR(100),
+CREATE TABLE user (
+    first_name VARCHAR(100),
     last_name VARCHAR(100),
     email VARCHAR(100),
     main_role ENUM('passenger', 'admin'),
