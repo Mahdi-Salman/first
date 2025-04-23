@@ -1,50 +1,61 @@
-name: SQL Validation
+name: SQL Query Tests
 
 on:
   push:
-    branches:
-      - '**' 
+    paths:
+      - '**.sql'
+      - 'test_queries.py'
   pull_request:
-    branches:
-      - '**'  
+    paths:
+      - '**.sql'
+      - 'test_queries.py'
 
 jobs:
-  validate-sql:
+  test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_pass
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-
-      - name: Install sqlfluff
-        run: |
-          python -m pip install --upgrade pip
-          pip install sqlfluff==2.3.5
-
-      - name: Validate SQL files
-        run: |
-          echo "Validating SQL files..."
-          sql_files=$(find . -type f -name "*.sql")
-          if [ -z "$sql_files" ]; then
-            echo "No SQL files found."
-          else
-            echo "Found SQL files:"
-            echo "$sql_files"
-            sqlfluff lint --dialect mysql $sql_files
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pymysql pytest-mock
+    
+    - name: Wait for MySQL
+      run: |
+        for i in {1..10}; do
+          if mysqladmin ping -h"127.0.0.1" -P"3306" -u"test_user" -p"test_pass" --silent; then
+            break
           fi
-
-      - name: Fix SQL files
-        run: |
-          echo "Fixing SQL files..."
-          sql_files=$(find . -type f -name "*.sql")
-          if [ -z "$sql_files" ]; then
-            echo "No SQL files found."
-          else
-            echo "Found SQL files:"
-            echo "$sql_files"
-            sqlfluff fix --dialect mysql $sql_files
-          fi
+          sleep 3
+        done
+    
+    - name: Run SQL tests
+      env:
+        DB_HOST: 127.0.0.1
+        DB_USER: test_user
+        DB_PASSWORD: test_pass
+        DB_NAME: test_db
+      run: |
+        pytest -v test_queries.py --cov=. --cov-report=xml
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      if: success()
