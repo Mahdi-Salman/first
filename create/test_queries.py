@@ -1,53 +1,52 @@
 import mysql.connector
-import re
+import pytest
 
-# تنظیمات اتصال
-conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='your_password',  # رمزت رو بذار
-)
-cursor = conn.cursor(dictionary=True)
+@pytest.fixture(scope="module")
+def test_db():
+    # اتصال اولیه به MySQL (بدون مشخص کردن database)
+    conn = mysql.connector.connect(
+        host="localhost", user="root", password="mahdi", autocommit=True
+    )
+    cursor = conn.cursor()
 
-# ایجاد دیتابیس تستی
-test_db_name = 'test_db_query'
-cursor.execute(f"DROP DATABASE IF EXISTS {test_db_name}")
-cursor.execute(f"CREATE DATABASE {test_db_name}")
-cursor.execute(f"USE {test_db_name}")
-print(f"✅ Created test database `{test_db_name}`")
+    # ساخت دیتابیس تست
+    cursor.execute("DROP DATABASE IF EXISTS test_db")
+    cursor.execute("CREATE DATABASE test_db")
+    cursor.close()
+    conn.close()
 
-# خواندن کوئری‌ها از فایل
-with open("query.sql", "r", encoding="utf-8") as f:
-    content = f.read()
+    # اتصال به دیتابیس تست
+    conn = mysql.connector.connect(
+        host="localhost", user="root", password="mahdi", database="test_db"
+    )
+    cursor = conn.cursor(dictionary=True)
 
-queries = [q.strip() for q in content.split("---------------------------------------------------------------") if q.strip()]
-print(f"🔍 Found {len(queries)} queries.")
+    # اجرای فایل کوئری
+    with open("query.sql", "r") as f:
+        queries = f.read().split(";")
+        for query in queries:
+            if query.strip():
+                cursor.execute(query)
 
-# اجرای هر کوئری و تست پایه‌ای
-for idx, query in enumerate(queries, 1):
-    print(f"\n🚀 Running Query #{idx}:")
-    try:
-        cursor.execute(query)
-        conn.commit()
+    conn.commit()
 
-        if re.match(r"(?i)\s*SELECT", query):  # اگر SELECT بود
-            result = cursor.fetchall()
-            print(f"🔹 Rows returned: {len(result)}")
-            assert len(result) > 0, f"❌ Query #{idx} returned no results"
+    yield cursor
 
-        elif re.match(r"(?i)\s*(INSERT|UPDATE|DELETE)", query):
-            affected = cursor.rowcount
-            print(f"🔹 Rows affected: {affected}")
-            assert affected > 0, f"❌ Query #{idx} affected no rows"
+    # پاکسازی بعد از تست
+    cursor.close()
+    conn.close()
 
-        else:
-            print("ℹ️ Query executed (DDL or unknown type).")
+    # حذف دیتابیس
+    conn = mysql.connector.connect(
+        host="localhost", user="root", password="mahdi", autocommit=True
+    )
+    cursor = conn.cursor()
+    cursor.execute("DROP DATABASE IF EXISTS test_db")
+    cursor.close()
+    conn.close()
 
-        print(f"✅ Query #{idx} passed.")
 
-    except Exception as e:
-        print(f"❌ Error in Query #{idx}: {e}")
-
-# حذف دیتابیس تستی
-cursor.execute(f"DROP DATABASE {test_db_name}")
-print(f"\n🧹 Test database `{test_db_name}` dropped.")
+def test_user_lastname(test_db):
+    test_db.execute("SELECT last_name FROM User WHERE user_id = 1")
+    result = test_db.fetchone()
+    assert result["last_name"] == "Redington"
