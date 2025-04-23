@@ -30,6 +30,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest pymysql pytest-mock pytest
         pip install mysql-connector-python
+        pip install pytest pytest-cov mysql-connector-python
 
     
     - name: Wait for MySQL
