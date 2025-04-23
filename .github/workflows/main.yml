@@ -1,14 +1,6 @@
-name: SQL Query Tests
+name: SQL Tests with Coverage
 
-on:
-  push:
-    paths:
-      - '**.sql'
-      - 'test_queries.py'
-  pull_request:
-    paths:
-      - '**.sql'
-      - 'test_queries.py'
+on: [push, pull_request]
 
 jobs:
   test:
@@ -36,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pymysql pytest-mock
+        pip install pytest pymysql pytest-mock pytest-cov
     
     - name: Wait for MySQL
       run: |
@@ -47,7 +39,7 @@ jobs:
           sleep 3
         done
     
-    - name: Run SQL tests
+    - name: Run tests with coverage
       env:
         DB_HOST: 127.0.0.1
         DB_USER: test_user
@@ -56,6 +48,8 @@ jobs:
       run: |
         pytest -v test_queries.py --cov=. --cov-report=xml
     
-    - name: Upload coverage
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
-      if: success()
+      with:
+        file: ./coverage.xml
+        flags: unittests
