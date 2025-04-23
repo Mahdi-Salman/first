@@ -18,12 +18,21 @@ def test_db():
     with conn.cursor() as cursor:
         # اجرای تمام فایل‌های SQL برای ایجاد ساختار
         sql_files = [
-            'city.sql', 'terminal.sql', 'user.sql', 
-            'transport_company.sql', 'vehicle_detail.sql',
-            'bus_detail.sql', 'train_detail.sql', 'flight_detail.sql',
-            'travel.sql', 'ticket.sql', 'reservation.sql',
-            'payment.sql', 'reservation_change.sql', 'report.sql'
-        ]
+        'city.sql',
+        'terminal.sql',
+        'user.sql',
+        'transport_company.sql',
+        'vehicle_detail.sql',
+        'bus_detail.sql',
+        'train_detail.sql',
+        'flight_detail.sql',
+        'travel.sql',
+        'ticket.sql',
+        'reservation.sql',
+        'payment.sql',
+        'reservation_change.sql',
+        'report.sql'
+    ]
         
         for file in sql_files:
             with open(file, 'r') as f:
