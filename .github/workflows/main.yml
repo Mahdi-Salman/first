@@ -46,6 +46,7 @@ jobs:
         DB_PASSWORD: test_pass
         DB_NAME: test_db
       run: |
+        cd create
         pytest -v test_queries.py --cov=. --cov-report=xml
     
     - name: Upload coverage to Codecov
