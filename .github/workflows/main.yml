@@ -9,10 +9,10 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: M.s28011384
           MYSQL_DATABASE: test_db
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: test_pass
+          MYSQL_USER: root
+          MYSQL_PASSWORD: M.s28011384
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -31,6 +31,7 @@ jobs:
         pip install pytest pymysql pytest-mock pytest
         pip install mysql-connector-python
         pip install pytest pytest-cov mysql-connector-python
+        pip install pymysql
 
     
     - name: Wait for MySQL
@@ -45,12 +46,11 @@ jobs:
     - name: Run tests with coverage
       env:
         DB_HOST: 127.0.0.1
-        DB_USER: test_user
-        DB_PASSWORD: test_pass
+        DB_USER: root
+        DB_PASSWORD: M.s28011384
         DB_NAME: test_db
       run: |
-        cd create
-        pytest -v test_queries.py --cov=. --cov-report=xml
+        pytest -v test.py --cov=. --cov-report=xml
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
