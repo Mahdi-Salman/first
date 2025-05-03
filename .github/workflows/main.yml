@@ -5,27 +5,9 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: M.s28011384
-          MYSQL_DATABASE: test_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: M.s28011384
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -u root -ppassword"
-          --health-interval=20s
-          --health-timeout=15s
-          --health-retries=10
 
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Wait for MySQL
-      run: sleep 30
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -40,15 +22,6 @@ jobs:
         pip install pytest pytest-cov mysql-connector-python
         pip install pymysql
 
-    
-    - name: Wait for MySQL
-      run: |
-        for i in {1..10}; do
-          if mysqladmin ping -h"127.0.0.1" -P"3306" -u"test_user" -p"test_pass" --silent; then
-            break
-          fi
-          sleep 3
-        done
     
     - name: Run tests with coverage
       env:
