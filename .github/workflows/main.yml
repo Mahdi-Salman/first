@@ -15,10 +15,17 @@ jobs:
           MYSQL_PASSWORD: M.s28011384
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping -u root -ppassword"
+          --health-interval=20s
+          --health-timeout=15s
+          --health-retries=10
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Wait for MySQL
+      run: sleep 30
     
     - name: Set up Python
       uses: actions/setup-python@v4
