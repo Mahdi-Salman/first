@@ -34,6 +34,3 @@ ALTER TABLE Travel
     ADD CONSTRAINT fk_travel_company
         FOREIGN KEY (transport_company_id) REFERENCES TransportCompany(transport_company_id)
         ON DELETE CASCADE;
-
-CREATE INDEX path 
-ON Travel (departure, destination);
