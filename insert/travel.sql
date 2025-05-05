@@ -14,3 +14,5 @@ VALUES
 UPDATE Travel
 SET Travel.departure_terminal_id = Travel.departure_terminal_id + 104
 WHERE Travel.travel_id < 3;
+
+

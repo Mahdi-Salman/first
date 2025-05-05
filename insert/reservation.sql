@@ -14,9 +14,9 @@ VALUES
 
 
 UPDATE Reservation
-SET reservation.status = 'paid'
-WHERE reservation.reservation_id > 50;
+SET Reservation.status = 'paid'
+WHERE Reservation.reservation_id > 50;
 
 UPDATE Reservation 
-SET reservation.status = 'paid'
-WHERE reservation.status = 'reserved' AND reservation.reservation_id < 47
+SET Reservation.status = 'paid'
+WHERE Reservation.status = 'reserved' AND Reservation.reservation_id < 47
