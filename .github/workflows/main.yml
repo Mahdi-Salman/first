@@ -52,24 +52,15 @@ jobs:
         mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" -e "SHOW DATABASES;"
 
     - name: Create schema
+      env:
+        MYSQL_PWD: ${{ env.MYSQL_ROOT_PASSWORD }}
       run: |
         echo "Creating database schema..."
-        for sql_file in create/*.sql; do
-          echo "Executing $sql_file"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/city.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/user.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/terminal.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/transport_company.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/travel.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/vehicle_detail.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/train_detail.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/bus_detail.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/flight_detail.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/ticket.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/reservation.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/reservation_change.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/payment.sql"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/report.sql"
+        for sql_file in city.sql user.sql terminal.sql transport_company.sql travel.sql vehicle_detail.sql train_detail.sql bus_detail.sql flight_detail.sql ticket.sql reservation.sql reservation_change.sql payment.sql report.sql; do
+          echo "=== Executing create/$sql_file ==="
+          mysql -h127.0.0.1 -P3306 -uroot "$MYSQL_DATABASE" < "create/$sql_file" && echo "Success" || { echo "Failed"; exit 1; }
+          echo "=== Tables after execution ==="
+          mysql -h127.0.0.1 -P3306 -uroot "$MYSQL_DATABASE" -e "SHOW TABLES;"
         done
 
     - name: Verify tables
