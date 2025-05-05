@@ -56,7 +56,20 @@ jobs:
         echo "Creating database schema..."
         for sql_file in create/*.sql; do
           echo "Executing $sql_file"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "$sql_file"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "city.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "user.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "terminal.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "transport_company.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "travel.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "vehicle_detail.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "train_detail.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "bus_detail.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "flight_detail.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "ticket.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "reservation.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "reservation_change.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "payment.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "report.sql"
         done
 
     - name: Verify tables
