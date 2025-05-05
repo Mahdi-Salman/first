@@ -13,10 +13,10 @@ VALUES
 
 
 
--- UPDATE Reservation
--- SET reservation.status = 'paid'
--- WHERE reservation.reservation_id > 50;
+UPDATE Reservation
+SET Reservation.status = 'paid'
+WHERE Reservation.reservation_id > 50;
 
--- UPDATE Reservation 
--- SET reservation.status = 'paid'
--- WHERE reservation.status = 'reserved' AND reservation.reservation_id < 47
+UPDATE Reservation 
+SET Reservation.status = 'paid'
+WHERE Reservation.status = 'reserved' AND Reservation.reservation_id < 47
