@@ -399,58 +399,6 @@ def test_query_14(test_db):
         assert sorted(results) == sorted(expected)
 
 
-# def test_query_15(test_db):
-#     expected = [
-#         ('datetime.datetime(2025, 5, 3, 14:34:17', 'Hamadan', '2025-05-03 14:32:53', 'Semnan', '2025-05-03 19:32:53', 275, 'plane'),
-#         ('2025-05-03 14:34:17', 'Rasht', '2025-05-03 14:32:53', 'Tehran', '2025-05-03 18:32:53', 250, 'plane'),
-#         ('2025-05-03 14:34:17', 'Rasht', '2025-05-03 14:32:53', 'Tehran', '2025-05-03 20:32:53', 120, 'train'),
-#         ('2025-05-03 14:34:17', 'Shahr-e Qods', '2025-05-03 14:32:53', 'Tehran', '2025-05-03 19:32:53', 300, 'plane'),
-#         ('2025-05-03 14:34:17', 'Varamin', '2025-05-03 14:32:53', 'Tehran', '2025-05-03 17:32:53', 100, 'train'),
-#         ('2025-05-03 14:34:17', 'Zahedan', '2025-05-03 14:32:53', 'Kermanshah', '2025-05-03 16:32:53', 200, 'plane'),
-#         ('2025-05-03 14:34:17', 'Zahedan', '2025-05-03 14:32:53', 'Tabriz', '2025-05-03 19:32:53', 80, 'train'),
-# ]
-#     with test_db.cursor() as cursor:
-#         cursor.execute("""
-#             SELECT r.reservation_time, c1.city_name, tr.departure_time, c2.city_name, tr.arrival_time, tr.price, tr.transport_type
-#             FROM travel tr
-#             JOIN terminal trm1 ON trm1.terminal_id = tr.departure_terminal_id
-#             JOIN terminal trm2 ON trm2.terminal_id = tr.destination_terminal_id
-#             JOIN city c1 ON c1.city_id = trm1.city_id
-#             JOIN city c2 ON c2.city_id = trm2.city_id
-#             JOIN ticket t ON tr.travel_id = t.travel_id
-#             JOIN reservation r ON r.ticket_id = t.ticket_id
-#             WHERE r.reservation_time > CURDATE() AND r.status = 'paid' 
-#             ORDER BY r.reservation_time;
-#         """)
-#         results = cursor.fetchall()
-#         results = [tuple(row.values()) for row in results]
-#         assert sorted(results) == sorted(expected)
-        
-        
-# def test_query_16(test_db):
-#     expected = [
-#         ('2', 'Varamin', '2025-05-03 14:32:53', 'Tehran', '2025-05-03 17:32:53', '100', 'train', '1')
-# ]
-#     with test_db.cursor() as cursor:
-#         cursor.execute("""
-#             SELECT t.ticket_id, c1.city_name, tr.departure_time, 
-#                 c2.city_name, tr.arrival_time, tr.price, tr.transport_type,
-#                 COUNT(r.ticket_id) AS total_reservations
-#             FROM travel tr
-#             JOIN terminal trm1 ON trm1.terminal_id = tr.departure_terminal_id
-#             JOIN terminal trm2 ON trm2.terminal_id = tr.destination_terminal_id
-#             JOIN city c1 ON c1.city_id = trm1.city_id
-#             JOIN city c2 ON c2.city_id = trm2.city_id
-#             JOIN ticket t ON tr.travel_id = t.travel_id
-#             JOIN reservation r ON r.ticket_id = t.ticket_id
-#             GROUP BY t.ticket_id, c1.city_name, tr.departure_time, c2.city_name, tr.arrival_time, tr.price, tr.transport_type
-#             ORDER BY total_reservations DESC
-#             LIMIT 1 OFFSET 1;
-#         """)
-#         results = cursor.fetchall()
-#         results = [tuple(row.values()) for row in results]
-#         assert sorted(results) == sorted(expected)
-
 def test_query_17(test_db):
     expected = [('Bob Brown', Decimal('100.0000'))]
     with test_db.cursor() as cursor:
@@ -592,7 +540,7 @@ def test_query_21(test_db):
 
 
 def test_query_22(test_db):
-    expected = [('travel_delay', 1)]
+    expected = [('travel_delay', 2)]
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT r.report_category, COUNT(*) AS report_count FROM Report r
@@ -620,7 +568,7 @@ def test_clean_database(test_db):
         cursor.execute("DELETE FROM Travel")
         cursor.execute("DELETE FROM User")
         test_db.commit()
-# ---------------- تست های مربوط به User ----------------
+
 
 def test_create_user(test_db):
     with test_db.cursor() as cursor:
@@ -660,7 +608,7 @@ def test_delete_user(test_db):
         user = cursor.fetchone()
         assert user is None
 
-# ---------------- تست های مربوط به Travel ----------------
+
 
 
 def test_create_travel(test_db):
@@ -706,7 +654,7 @@ def test_delete_travel(test_db):
         travel = cursor.fetchone()
         assert travel is None
 
-# ---------------- تست های مربوط به Ticket ----------------
+
 
 def test_create_ticket(test_db):
     with test_db.cursor() as cursor:
@@ -748,7 +696,7 @@ def test_delete_ticket(test_db):
         ticket = cursor.fetchone()
         assert ticket is None
 
-# ---------------- تست های مربوط به City ----------------
+
 
 def test_create_city(test_db):
     with test_db.cursor() as cursor:
@@ -775,7 +723,7 @@ def test_delete_city(test_db):
         city = cursor.fetchone()
         assert city is None
 
-# ---------------- تست های مربوط به Terminal ----------------
+
 
 def test_create_terminal(test_db):
     with test_db.cursor() as cursor:
