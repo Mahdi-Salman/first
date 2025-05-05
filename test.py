@@ -99,7 +99,7 @@ def test_query_1(test_db):
     expected = [('Bob', 'Brown'), ('Emma', 'Taylor'), ('Henry', 'Thomas'), ('Ali', 'Prs'), ('Mehdi', 'Salman')]
     with test_db.cursor() as cursor:
         cursor.execute("""
-            SELECT DISTINCT user.first_name, user.last_name
+            SELECT DISTINCT User.first_name, User.last_name
             FROM User
             LEFT JOIN Reservation ON user.user_id = Reservation.user_id
             WHERE Reservation.status != 'paid' OR Reservation.user_id IS NULL
@@ -113,7 +113,7 @@ def test_query_2(test_db):
     ('Frank', 'Anderson'),('Grace', 'Martinez'),('Isabel', 'White')]
     with test_db.cursor() as cursor:
         cursor.execute("""
-            SELECT DISTINCT user.first_name, user.last_name
+            SELECT DISTINCT User.first_name, User.last_name
             FROM User
             LEFT JOIN Reservation ON User.user_id = Reservation.user_id
             WHERE Reservation.status = 'paid' AND Reservation.user_id IS NOT NULL
@@ -323,7 +323,7 @@ def test_query_11(test_db):
 ]
     with test_db.cursor() as cursor:
         cursor.execute("""
-            SELECT User.first_name, user.last_name
+            SELECT User.first_name, User.last_name
             FROM User
             WHERE User.user_type = 'support';
         """)
