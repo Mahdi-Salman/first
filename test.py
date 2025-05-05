@@ -101,7 +101,7 @@ def test_query_1(test_db):
         cursor.execute("""
             SELECT DISTINCT User.first_name, User.last_name
             FROM User
-            LEFT JOIN Reservation ON user.user_id = Reservation.user_id
+            LEFT JOIN Reservation ON User.user_id = Reservation.user_id
             WHERE Reservation.status != 'paid' OR Reservation.user_id IS NULL
         """)
         results = cursor.fetchall()
