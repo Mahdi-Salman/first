@@ -11,6 +11,6 @@ VALUES
 ('bus', 39, 12, NOW(), DATE_ADD(NOW(), INTERVAL 9 HOUR), 70, 50, 9, 55, false, 'VIP'),
 ('plane', 40, 79, NOW(), DATE_ADD(NOW(), INTERVAL 5 HOUR), 210, 170, 10, 275, true, 'business');
 
--- UPDATE Travel
--- SET travel.departure_terminal_id = travel.departure_terminal_id + 104
--- WHERE travel.travel_id < 3;
+UPDATE Travel
+SET Travel.departure_terminal_id = Travel.departure_terminal_id + 104
+WHERE Travel.travel_id < 3;
