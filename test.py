@@ -99,10 +99,10 @@ def test_query_1(test_db):
     expected = [('Bob', 'Brown'), ('Emma', 'Taylor'), ('Henry', 'Thomas'), ('Ali', 'Prs'), ('Mehdi', 'Salman')]
     with test_db.cursor() as cursor:
         cursor.execute("""
-            SELECT DISTINCT user.first_name, user.last_name
-            FROM user
-            LEFT JOIN reservation ON user.user_id = reservation.user_id
-            WHERE reservation.status != 'paid' OR reservation.user_id IS NULL
+            SELECT DISTINCT User.first_name, User.last_name
+            FROM User
+            LEFT JOIN Reservation ON user.user_id = Reservation.user_id
+            WHERE Reservation.status != 'paid' OR Reservation.user_id IS NULL
         """)
         results = cursor.fetchall()
         results = [tuple(row.values()) for row in results]
@@ -113,10 +113,10 @@ def test_query_2(test_db):
     ('Frank', 'Anderson'),('Grace', 'Martinez'),('Isabel', 'White')]
     with test_db.cursor() as cursor:
         cursor.execute("""
-            SELECT DISTINCT user.first_name, user.last_name
-            FROM user
-            LEFT JOIN reservation ON user.user_id = reservation.user_id
-            WHERE reservation.status = 'paid' AND reservation.user_id IS NOT NULL
+            SELECT DISTINCT User.first_name, User.last_name
+            FROM User
+            LEFT JOIN Reservation ON User.user_id = Reservation.user_id
+            WHERE Reservation.status = 'paid' AND Reservation.user_id IS NOT NULL
         """)
         results = cursor.fetchall()
         results = [tuple(row.values()) for row in results]
@@ -143,8 +143,8 @@ def test_query_3(test_db):
                 YEAR(p.payment_date) AS year,
                 MONTH(p.payment_date) AS month, 
                 SUM(p.amount) AS total_paid
-            FROM user u
-            JOIN payment p ON u.user_id = p.user_id
+            FROM User u
+            JOIN Payment p ON u.user_id = p.user_id
             GROUP BY u.user_id, name, year, month
             ORDER BY year DESC, month DESC, total_paid DESC;
         """)
@@ -188,8 +188,8 @@ def test_query_5(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT u.first_name, u.last_name, u.email
-            FROM user u
-            JOIN reservation r ON u.user_id = r.user_id
+            FROM User u
+            JOIN Reservation r ON u.user_id = r.user_id
             WHERE r.status = 'paid'
             ORDER BY r.reservation_time DESC
             LIMIT 1;
@@ -209,10 +209,10 @@ def test_query_6(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT u.email
-            FROM user u
-            JOIN payment p ON u.user_id = p.user_id
+            FROM User u
+            JOIN Payment p ON u.user_id = p.user_id
             GROUP BY p.payment_id
-            HAVING SUM(p.amount) > (SELECT AVG(p.amount) FROM payment p);
+            HAVING SUM(p.amount) > (SELECT AVG(p.amount) FROM Payment p);
         """)
         results = cursor.fetchall()
         results = [tuple(row.values()) for row in results]
@@ -229,9 +229,9 @@ def test_query_7(test_db):
             SELECT 
                 tr.transport_type, 
                 COUNT(r.ticket_id) AS number_of_tickets
-            FROM ticket t
-            JOIN travel tr ON t.travel_id = tr.travel_id
-            JOIN reservation r ON r.ticket_id = t.ticket_id
+            FROM Ticket t
+            JOIN Travel tr ON t.travel_id = tr.travel_id
+            JOIN Reservation r ON r.ticket_id = t.ticket_id
             WHERE r.status = 'paid'
             GROUP BY tr.transport_type
             ORDER BY number_of_tickets DESC;
@@ -250,8 +250,8 @@ def test_query_8(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT CONCAT(first_name, ' ', last_name) AS name, count(r.user_id) AS number_of_reserve
-            FROM user u
-            JOIN reservation r ON r.user_id = u.user_id
+            FROM User u
+            JOIN Reservation r ON r.user_id = u.user_id
             WHERE r.reservation_time >= DATE_SUB(NOW(), INTERVAL 7 DAY) AND r.status = 'paid'
             GROUP BY u.first_name, u.last_name
             ORDER BY count(r.user_id) DESC
@@ -323,9 +323,9 @@ def test_query_11(test_db):
 ]
     with test_db.cursor() as cursor:
         cursor.execute("""
-            SELECT user.first_name, user.last_name
-            FROM user
-            WHERE user.user_type = 'support';
+            SELECT User.first_name, User.last_name
+            FROM User
+            WHERE User.user_type = 'support';
         """)
         results = cursor.fetchall()
         results = [tuple(row.values()) for row in results]
@@ -337,8 +337,8 @@ def test_query_12(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT u.first_name, u.last_name
-            FROM user u
-            JOIN reservation r ON u.user_id = r.user_id
+            FROM User u
+            JOIN Reservation r ON u.user_id = r.user_id
             WHERE r.status = 'paid'
             GROUP BY u.user_id
             HAVING COUNT(r.reservation_id) >= 2;
@@ -364,10 +364,10 @@ def test_query_13(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT CONCAT(u.first_name, ' ', u.last_name) AS name
-            FROM user u
-            JOIN reservation r ON u.user_id = r.user_id
-            JOIN ticket t ON r.ticket_id = t.ticket_id
-            JOIN travel tr ON t.travel_id = tr.travel_id
+            FROM User u
+            JOIN Reservation r ON u.user_id = r.user_id
+            JOIN Ticket t ON r.ticket_id = t.ticket_id
+            JOIN Travel tr ON t.travel_id = tr.travel_id
             GROUP BY u.user_id, u.first_name, u.last_name
             HAVING 
                 COUNT(CASE WHEN tr.transport_type = 'plane' THEN 1 END) <= 2 OR
@@ -384,10 +384,10 @@ def test_query_14(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             SELECT u.email
-            FROM user u
-            JOIN reservation r ON u.user_id = r.user_id
-            JOIN ticket t ON r.ticket_id = t.ticket_id
-            JOIN travel tr ON t.travel_id = tr.travel_id
+            FROM User u
+            JOIN Reservation r ON u.user_id = r.user_id
+            JOIN Ticket t ON r.ticket_id = t.ticket_id
+            JOIN Travel tr ON t.travel_id = tr.travel_id
             GROUP BY u.user_id
             HAVING 
                 SUM(tr.transport_type = 'plane') > 0 AND
@@ -514,8 +514,8 @@ def test_query_19(test_db):
     with test_db.cursor() as cursor:
         cursor.execute("""
             DELETE t
-            FROM ticket t
-            JOIN reservation r ON r.ticket_id = t.ticket_id
+            FROM Ticket t
+            JOIN Reservation r ON r.ticket_id = t.ticket_id
             JOIN ReservationChange rc ON rc.reservation_id = r.reservation_id
             JOIN User u ON r.user_id = u.user_id
             WHERE u.last_name = 'Redington' AND rc.next_status = 'canceled';
