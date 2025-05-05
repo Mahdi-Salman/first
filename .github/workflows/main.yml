@@ -56,7 +56,7 @@ jobs:
         echo "Creating database schema..."
         for sql_file in create/*.sql; do
           echo "Executing $sql_file"
-          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "city.sql"
+          mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "create/city.sql"
           mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "user.sql"
           mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "terminal.sql"
           mysql -h127.0.0.1 -P3306 -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "transport_company.sql"
