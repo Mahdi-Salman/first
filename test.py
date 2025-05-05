@@ -53,7 +53,6 @@ def test_db():
                     if statement.strip():
                         cursor.execute(statement)
         
-        os.chdir(r'C:\\Users\\Lenovo\\Desktop\\first\\insert')
         setup_test_data(cursor, conn)
     
     yield conn
