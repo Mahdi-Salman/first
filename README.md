@@ -1,109 +1,75 @@
-# 📱 FariBank - نسخه اندروید
+# 🏦 FariBank - A Lovely Neo Bank
 
-این پروژه، فاز جدیدی از توسعه نئوبانک «فری‌بانک» است که با هدف ایجاد یک **اپلیکیشن اختصاصی اندروید** با استفاده از **Android SDK** و زبان طراحی **XML** تعریف شده است.
-
----
-
-## 📖 فهرست مطالب
-
-- [🎯 اهداف اصلی پروژه](#اهداف-اصلی-پروژه)
-- [✨ امکانات اپلیکیشن (بخش کاربر)](#امکانات-اپلیکیشن-بخش-کاربر)
-  - [صفحه ورود و ثبت‌نام](#صفحه-ورود-و-ثبتنام)
-  - [داشبورد اصلی](#داشبورد-اصلی)
-  - [مدیریت مخاطبین](#مدیریت-مخاطبین)
-  - [انتقال وجه](#انتقال-وجه)
-  - [صندوق‌های سرمایه‌گذاری](#صندوقهای-سرمایهگذاری)
-  - [درخواست‌های پشتیبانی](#درخواستهای-پشتیبانی)
-  - [وام و اقساط](#وام-و-اقساط)
-- [🤖 مدیریت هوشمند سیستم (بخش بک‌اند)](#مدیریت-هوشمند-سیستم-بخش-بکاند)
-- [🛠️ راهنمای پیاده‌سازی با Android Studio](#راهنمای-پیادهسازی-با-android-studio)
+This project is a complete simulation of a modern neo bank called "FariBank". The project was developed in two main phases; the first phase focused on implementing basic features, and the second phase expanded the system's capabilities by adding new administrative roles and connecting to other banking networks.
 
 ---
 
-## 🎯 اهداف اصلی پروژه
+## 📖 Table of Contents
 
-1.  **طراحی و پیاده‌سازی رابط کاربری گرافیکی (GUI):** جایگزین کردن رابط کاربری متنی (CLI) با یک محیط گرافیکی جذاب و کاربرپسند برای کاربران اندروید.
-2.  **جداسازی منطق از نمایش (Decoupling):** جداسازی کامل کدهای مربوط به منطق اصلی برنامه از کدهای رابط کاربری.
-3.  **پیاده‌سازی پردازش همزمان:** استفاده از چندنخی (Multi-threading) برای انجام خودکار وظایف مدیر سیستم.
-4.  **مدیریت خطای پیشرفته:** پیاده‌سازی مکانیزم‌های مناسب برای مدیریت خطاها در محیط گرافیکی.
-
----
-
-## ✨ امکانات اپلیکیشن (بخش کاربر)
-
-### صفحه ورود و ثبت‌نام
-- **صفحه ورود:** شامل فیلدهای `شماره تلفن` و `رمز عبور` به همراه دکمه **ورود**. در صورت ورود اطلاعات نادرست، پیام خطای مناسب نمایش داده می‌شود.
-- **صفحه ثبت‌نام:** فرمی برای ثبت‌نام کاربران جدید با دریافت **نام**، **نام خانوادگی**، **شماره تلفن**، **کد ملی** و **رمز عبور قوی**.
-  > **نکته:** رمز عبور باید **قوی** و شامل ترکیبی از حروف بزرگ و کوچک، اعداد و کاراکترهای خاص باشد.
-
-### داشبورد اصلی
-صفحه اصلی برنامه پس از ورود موفق کاربر که شامل موارد زیر است:
-- 📊 نمایش موجودی فعلی حساب.
-- 📜 لیست چند تراکنش اخیر.
-- ➕ دکمه‌ای برای شارژ مستقیم حساب.
-- 🗂️ دکمه‌های دسترسی سریع به بخش‌های مهم مانند **انتقال وجه** و **صندوق‌ها**.
-
-### مدیریت مخاطبین
-- ➕ **افزودن مخاطب:** با دریافت نام، نام خانوادگی و شماره تلفن.
-- 📝 **لیست مخاطبین:** نمایش مخاطبین در یک لیست (`RecyclerView`) با قابلیت **ویرایش** و **حذف**.
-
-### انتقال وجه
-یکی از بخش‌های کلیدی برنامه با قابلیت‌های زیر:
-- **انتخاب مقصد:** امکان وارد کردن شماره حساب دستی، انتخاب از لیست مخاطبین یا انتخاب از حساب‌های اخیر.
-- **ورود مبلغ:** فیلدی برای تعیین مبلغ انتقال.
-- **تایید نهایی:** نمایش یک دیالوگ تاییدیه شامل نام صاحب حساب مقصد و مبلغ، قبل از انجام تراکنش.
-- **روش‌های انتقال:**
-
-| نام روش | مقصد | سرعت انتقال | کارمزد |
-| :--- | :--- | :--- | :--- |
-| **فری به فری** | حساب‌های داخلی فری‌بانک | آنی | **رایگان** |
-| **کارت به کارت**| کارت‌های سایر بانک‌ها | آنی | ثابت |
-| **پایا / پل** | حساب‌های سایر بانک‌ها | طبق سیکل بانکی | متغیر |
-
-### صندوق‌های سرمایه‌گذاری
-کاربر می‌تواند صندوق‌های سرمایه‌گذاری خود را در این بخش مدیریت کند:
-- **ایجاد صندوق جدید:** با تعیین نام و نوع صندوق.
-- **لیست صندوق‌ها:** نمایش صندوق‌ها در قالب لیست.
-- **مدیریت صندوق:** امکان واریز وجه به صندوق یا برداشت از آن.
-- **مشاهده جزئیات:** نمایش اطلاعات کامل هر صندوق (موجودی، نوع، تراکنش‌ها).
-
-### درخواست‌های پشتیبانی
-- **ثبت درخواست:** امکان ارسال تیکت پشتیبانی برای مدیر سیستم.
-- **مشاهده پاسخ:** مشاهده جزئیات درخواست‌ها و پاسخ‌های ثبت‌شده توسط مدیر.
-
-### وام و اقساط
-این بخش جدید به کاربران امکان مدیریت وام‌های خود را می‌دهد:
-- **درخواست وام:** فرمی برای ثبت درخواست وام جدید با تعیین مبلغ، مدت بازپرداخت و نوع وام.
-- **مدیریت اقساط:**
-
-| قابلیت | توضیحات |
-| :--- | :--- |
-| **لیست وام‌ها** | نمایش وام‌های فعال کاربر شامل مبلغ کل، تعداد اقساط و تاریخ شروع. |
-| **جزئیات وام** | با انتخاب هر وام، جزئیات اقساط آن (مبلغ، تاریخ پرداخت، وضعیت) نمایش داده می‌شود. |
-| **پرداخت قسط** | دکمه‌ای برای پرداخت قسط که پس از تایید، مبلغ را از حساب اصلی کسر می‌کند. |
+- [📝 About the Project](#about-the-project)
+- [👥 System Roles](#system-roles)
+  - [👤 Regular User (Customer)](#regular-user)
+  - [🛡️ Support Staff](#support-staff)
+  - [👑 System Administrator](#system-administrator)
 
 ---
 
-## 🤖 مدیریت هوشمند سیستم (بخش بک‌اند)
+## 📝 About the Project
 
-این بخش نیازی به رابط کاربری گرافیکی ندارد و وظایف مدیر را به صورت خودکار در **Threadهای مجزا** انجام می‌دهد:
-- **پرداخت سود صندوق‌ها:** یک Thread خودکار که به صورت دوره‌ای (مثلاً ماهانه) سود صندوق‌ها را به حساب کاربران واریز می‌کند.
-- **انجام انتقال وجه خودکار:** پردازش انتقال‌هایی که نیاز به تایید مدیر دارند.
-- **پاسخ خودکار به پشتیبانی:** ارسال پاسخ اولیه و خودکار («به زودی همکاران ما با شما تماس می‌گیرند») به تیکت‌های پشتیبانی.
-- **بررسی درخواست وام:** یک Thread هوشمند که سوابق کاربر را بررسی کرده و درخواست‌های وام را به صورت خودکار تایید یا رد می‌کند.
+FariBank is a fully virtual and online bank that provides all its services without needing a physical branch. The main goal of this project is to build a comprehensive banking platform with key features such as **account management**, **secure money transfers**, **investment options**, and **24/7 support**.
+
+In the final version, the main focus has been on **improving and refactoring previous code**, adding the necessary structures for easier future maintenance, and expanding features to create a competitive product in the market.
 
 ---
 
-## 🛠️ راهنمای پیاده‌سازی با Android Studio
+## 👥 System Roles
 
-برای ساخت اپلیکیشن، از کامپوننت‌ها و اصول زیر در **محیط اندروید** استفاده کنید:
+The system has three main roles with different access levels:
 
-| اصول کلیدی (Key Principles) | ویجت‌های کلیدی (Widgets) |
-| :--- | :--- |
-| **محیط توسعه:** `Android Studio` | **ورودی متن:** `EditText` |
-| **طراحی UI:** فایل‌های `XML` | **دکمه:** `Button` |
-| **مدیریت صفحات:** `Activity` و `Fragment` | **نمایش متن:** `TextView` |
-| **لیست‌های بهینه:** `RecyclerView` | **کارت‌ها:** `CardView` |
-| **ناوبری:** `Intents` | **دیالوگ‌ها:** `AlertDialog` |
-| | **نوار پیشرفت:** `ProgressBar` |
-| | **انتخاب:** `Spinner` |
+### Regular User
+Customers are the beating heart of the bank and have access to a full range of financial services:
+
+- 🔑 **Sign-up and Login:** Users sign up in the system with their mobile number.
+  > Note: The password must be strong and include a combination of uppercase and lowercase letters, numbers, and special characters.
+
+- 🛡️ **Identity Verification:** For complete security, all account features remain disabled until identity is verified by the support team.
+
+- 💰 **Account Management:** Includes instant account top-up, viewing the current balance, and receiving a complete list of transactions with the ability to sort by date and filter by a time range.
+
+- 📞 **Contact Management:** Users can add, edit, and manage their contact list for faster money transfers.
+
+- 📈 **Investment Funds:**
+  - **Savings Fund:** A virtual account for simple money storage and management.
+  - **Remainder Fund:** A smart way to save small change; after each transaction, the remaining amount is rounded up and deposited into this fund.
+  - **Reward Fund:** A fixed-term investment fund that deposits a fixed monthly interest into the user's main account.
+
+- 📱 **SIM Card Top-up:** Ability to buy mobile credit for any number, the user's own number, or one of the saved contacts.
+
+- 💸 **Money Transfer:** Users can transfer money to an **account number**, **card number**, or **contacts** (if the contact is mutual).
+
+  | Method Name | Destination | Transfer Speed | Fee |
+  | :--- | :--- | :--- | :--- |
+  | **Fari-to-Fari** | Internal FariBank Accounts | Instant | Free |
+  | **Card-to-Card**| Other Banks | Instant | Fixed |
+  | **Paya / Pol** | Other Banks | Per Banking Cycle | Variable |
+
+- 💬 **Support:** Ability to submit a support request for different parts of the system and track its status (Submitted, In Progress, Closed).
+
+- ⚙️ **Settings:** Access to security settings such as **changing the password**, setting or changing the **card PIN (4-digit)**, and enabling/disabling the contact transfer feature.
+
+### Support Staff
+These users are responsible for handling customer issues and managing the initial account security process.
+
+- 👷 **Managed by Admin:** Support users are created and managed by the System Administrator, who assigns specific tasks to them.
+- ✅ **Identity Verification:** Reviewing and approving or rejecting new user verification requests with a reason.
+- 📨 **Handling Requests:** Managing user support tickets, recording responses, and updating their status.
+- 🗂️ **Task Assignment:** Each support user only has access to requests related to their assigned department.
+- 📋 **Viewing User Information:** Limited and controlled access to customer information solely for support purposes.
+
+### System Administrator
+This role has the highest level of access in the system and is responsible for the overall platform management.
+
+- 🤴 **Centralized Management:** A senior administrator is pre-defined in the system who creates and manages other administrators and support users.
+- 📊 **Main System Settings:** Ability to define and change core system parameters like fee rates and fund interest percentages.
+- 👤 **Full User Management:** Viewing the list of all system users and the ability to create, edit, or block user accounts at all levels.
+- ⚙️ **Batch Transaction Execution:** Manually executing pending transactions such as monthly interest payments for funds or settling Paya transfers.
